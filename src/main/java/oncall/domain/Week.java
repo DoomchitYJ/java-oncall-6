@@ -2,21 +2,26 @@ package oncall.domain;
 
 public enum Week {
 
-    MON("월"),
-    TUE("화"),
-    WED("수"),
-    THR("목"),
-    FRI("금"),
-    SAT("토"),
-    SUN("일");
+    MON("월", false),
+    TUE("화", false),
+    WED("수", false),
+    THR("목", false),
+    FRI("금", false),
+    SAT("토", true),
+    SUN("일", true);
 
     private final String name;
+    private final boolean isWeekend;
 
-    Week(String name) {
+    Week(String name, boolean isWeekend) {
         this.name = name;
+        this.isWeekend = isWeekend;
     }
 
     public String getName() {
         return name;
+    }
+    public boolean isWeekend() {
+        return isWeekend;
     }
 }
