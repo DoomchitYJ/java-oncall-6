@@ -1,18 +1,16 @@
 package oncall.controller;
 
-import static oncall.exception.ExceptionMessage.INVALID_INPUT;
 import static oncall.exception.ExceptionMessage.MAX_TRY_ERROR;
 import static oncall.view.ErrorPrinter.printError;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import oncall.domain.Month;
 import oncall.domain.Week;
 import oncall.domain.WorkerPlacer;
 import oncall.exception.OncallException;
 import oncall.validator.MonthDayValidator;
+import oncall.validator.NameValidator;
 import oncall.view.InputView;
 import oncall.view.OutputView;
 
@@ -25,12 +23,6 @@ public class Controller {
 
     private static final int WEEKDAY_WORKERS_INDEX = 0;
     private static final int WEEKEND_WORKERS_INDEX = 1;
-
-    private static final int NAME_LENGTH_MIN = 1;
-    private static final int NAME_LENGTH_MAX = 5;
-
-    private static final int NAME_COUNT_MIN = 5;
-    private static final int NAME_COUNT_MAX = 35;
 
     private static final String DELIMITER = ",";
 
@@ -73,44 +65,17 @@ public class Controller {
                         .split(DELIMITER))
                         .map(String::trim)
                         .toList();
-                validateWorkers(weekdayWorkers);
+                NameValidator.validate(weekdayWorkers);
                 List<String> weekendWorkers = Arrays.stream(input.get(WEEKEND_WORKERS_INDEX)
                                 .split(DELIMITER))
                         .map(String::trim)
                         .toList();
-                validateWorkers(weekendWorkers);
+                NameValidator.validate(weekendWorkers);
                 return Arrays.asList(weekdayWorkers, weekendWorkers);
             } catch (IllegalArgumentException e) {
                 printError(e.getMessage());
             }
         }
         throw new OncallException(MAX_TRY_ERROR);
-    }
-
-    private static void validateWorkers(List<String> workers) {
-        validateNamesLength(workers);
-        validateNamesDuplicate(workers);
-        validateNamesCount(workers);
-    }
-
-    private static void validateNamesLength(List<String> workers) {
-        for (String worker : workers) {
-            if (worker.length() < NAME_LENGTH_MIN || worker.length() > NAME_LENGTH_MAX) {
-                throw new OncallException(INVALID_INPUT);
-            }
-        }
-    }
-
-    private static void validateNamesDuplicate(List<String> workers) {
-        Set<String> workersSet = new HashSet<>(workers);
-        if (workersSet.size() != workers.size()) {
-            throw new OncallException(INVALID_INPUT);
-        }
-    }
-
-    private static void validateNamesCount(List<String> workers) {
-        if (workers.size() < NAME_COUNT_MIN || workers.size() > NAME_COUNT_MAX) {
-            throw new OncallException(INVALID_INPUT);
-        }
     }
 }
