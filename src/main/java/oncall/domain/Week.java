@@ -1,5 +1,9 @@
 package oncall.domain;
 
+import static oncall.exception.ExceptionMessage.INVALID_INPUT;
+
+import oncall.exception.OncallException;
+
 public enum Week {
 
     MON("월", false),
@@ -23,5 +27,14 @@ public enum Week {
     }
     public boolean isWeekend() {
         return isWeekend;
+    }
+
+    public static Week fromName(String name) {
+        for (Week week : values()) {
+            if (week.getName().equals(name)) {
+                return week;
+            }
+        }
+        throw new OncallException(INVALID_INPUT);
     }
 }
