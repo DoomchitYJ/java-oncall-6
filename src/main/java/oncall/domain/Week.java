@@ -6,22 +6,20 @@ import oncall.exception.OncallException;
 
 public enum Week {
 
-    MON("월", 0, false),
-    TUE("화", 1, false),
-    WED("수", 2, false),
-    THR("목", 3, false),
-    FRI("금", 4,false),
-    SAT("토", 5,true),
-    SUN("일", 6,true);
+    MON("월", 0),
+    TUE("화", 1),
+    WED("수", 2),
+    THR("목", 3),
+    FRI("금", 4),
+    SAT("토", 5),
+    SUN("일", 6);
 
     private final String name;
     private final int order;
-    private final boolean isWeekend;
 
-    Week(String name, int order, boolean isWeekend) {
+    Week(String name, int order) {
         this.name = name;
         this.order = order;
-        this.isWeekend = isWeekend;
     }
 
     public String getName() {
@@ -29,9 +27,6 @@ public enum Week {
     }
     public int getOrder() {
         return order;
-    }
-    public boolean isWeekend() {
-        return isWeekend;
     }
 
     public static boolean isValid(String name) {
