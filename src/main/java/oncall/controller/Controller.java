@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Set;
 import oncall.domain.Month;
 import oncall.domain.Week;
+import oncall.domain.WorkerPlacer;
 import oncall.exception.OncallException;
 import oncall.view.InputView;
+import oncall.view.OutputView;
 
 public class Controller {
 
@@ -40,8 +42,10 @@ public class Controller {
         List<List<String>> workers = readWorkers();
         List<String> weekdayWorkers = workers.get(WEEKDAY_WORKERS_INDEX);
         List<String> weekendWorkers = workers.get(WEEKEND_WORKERS_INDEX);
-        System.out.println(weekdayWorkers);
-        System.out.println(weekendWorkers);
+
+        WorkerPlacer workerPlacer = new WorkerPlacer(month, day, weekdayWorkers, weekendWorkers);
+        List<String> result = workerPlacer.place();
+        OutputView.showResult(result);
     }
 
     private static List<String> readMonthDay() {
