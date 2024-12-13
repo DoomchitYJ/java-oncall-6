@@ -34,6 +34,15 @@ public enum Week {
         return isWeekend;
     }
 
+    public static boolean isValid(String name) {
+        for (Week week : values()) {
+            if (week.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Week fromName(String name) {
         for (Week week : values()) {
             if (week.getName().equals(name)) {

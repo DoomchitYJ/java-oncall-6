@@ -12,6 +12,7 @@ import oncall.domain.Month;
 import oncall.domain.Week;
 import oncall.domain.WorkerPlacer;
 import oncall.exception.OncallException;
+import oncall.validator.MonthDayValidator;
 import oncall.view.InputView;
 import oncall.view.OutputView;
 
@@ -55,26 +56,13 @@ public class Controller {
                         .split(DELIMITER))
                         .map(String::trim)
                         .toList();
-                validateMonthDay(input);
+                MonthDayValidator.validate(input);
                 return input;
             } catch (IllegalArgumentException e) {
                 printError(e.getMessage());
             }
         }
         throw new OncallException(MAX_TRY_ERROR);
-    }
-
-    private static void validateMonthDay(List<String> input) {
-        validateMonth(input.get(MONTH_INDEX));
-        validateDay(input.get(DAY_INDEX));
-    }
-
-    private static void validateMonth(String monthInString) {
-        Month month = Month.fromName(monthInString);
-    }
-
-    private static void validateDay(String dayInString) {
-        Week day = Week.fromName(dayInString);
     }
 
     private static List<List<String>> readWorkers() {

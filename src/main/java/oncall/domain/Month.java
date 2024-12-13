@@ -41,6 +41,15 @@ public enum Month {
         return holidays;
     }
 
+    public static boolean isValid(String name) {
+        for (Month month : values()) {
+            if (month.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Month fromName(String name) {
         for (Month month : values()) {
             if (month.getName().equals(name)) {
