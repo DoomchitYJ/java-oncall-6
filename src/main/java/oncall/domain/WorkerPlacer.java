@@ -43,31 +43,32 @@ public class WorkerPlacer {
             String yesterdayWorker = getYesterdayWorker(resultNames);
 
             // 평일
-            if (!isHoliday(i) && !isWeekend(currentDay)) {
-                String todayWorker = weekdayWorkers.pollFirst();
-                weekdayWorkers.addLast(todayWorker);
-                if (todayWorker.equals(yesterdayWorker)) {
-                    resultNames.add(weekdayWorkers.pollFirst());
-                    weekdayWorkers.addFirst(todayWorker);
-                }
-                else {
+            if (!isWeekend(currentDay)) {
+                // 공휴일이 아닌 평일
+                if (!isHoliday(i)) {
+                    String todayWorker = weekdayWorkers.pollFirst();
+                    weekdayWorkers.addLast(todayWorker);
+                    if (todayWorker.equals(yesterdayWorker)) {
+                        String nextWorker = weekdayWorkers.pollFirst();
+                        weekdayWorkers.addFirst(todayWorker);
+                        todayWorker = nextWorker;
+                    }
                     resultNames.add(todayWorker);
+                    todayResult = makeTodayResult(todayResult, i, currentDay, resultNames.getLast());
                 }
-                todayResult = todayResult + i + DAY + Week.getNameByOrder(currentDay)+ " " + resultNames.getLast();
-            }
 
-            // 공휴일
-            if (isHoliday(i)) {
-                String todayWorker = weekendWorkers.pollFirst();
-                weekendWorkers.addLast(todayWorker);
-                if (todayWorker.equals(yesterdayWorker)) {
-                    resultNames.add(weekendWorkers.pollFirst());
-                    weekendWorkers.addFirst(todayWorker);
-                }
-                else {
+                // 공휴일
+                if (isHoliday(i)) {
+                    String todayWorker = weekendWorkers.pollFirst();
+                    weekendWorkers.addLast(todayWorker);
+                    if (todayWorker.equals(yesterdayWorker)) {
+                        String nextWorker = weekendWorkers.pollFirst();
+                        weekendWorkers.addFirst(todayWorker);
+                        todayWorker = nextWorker;
+                    }
                     resultNames.add(todayWorker);
+                    todayResult = todayResult + i + DAY + Week.getNameByOrder(currentDay)+HOLIDAY+ " " + resultNames.getLast();
                 }
-                todayResult = todayResult + i + DAY + Week.getNameByOrder(currentDay)+HOLIDAY+ " " + resultNames.getLast();
             }
 
             // 주말
@@ -75,12 +76,11 @@ public class WorkerPlacer {
                 String todayWorker = weekendWorkers.pollFirst();
                 weekendWorkers.addLast(todayWorker);
                 if (todayWorker.equals(yesterdayWorker)) {
-                    resultNames.add(weekendWorkers.pollFirst());
+                    String nextWorker = weekendWorkers.pollFirst();
                     weekendWorkers.addFirst(todayWorker);
+                    todayWorker = nextWorker;
                 }
-                else {
-                    resultNames.add(todayWorker);
-                }
+                resultNames.add(todayWorker);
                 todayResult = todayResult + i + DAY + Week.getNameByOrder(currentDay)+ " " + resultNames.getLast();
             }
 
@@ -115,5 +115,9 @@ public class WorkerPlacer {
 
     private int updateCurrentDay(int currentDay) {
         return (currentDay+1) % DAYSOFWEEK;
+    }
+
+    private String makeTodayResult(String todayResult, int i, int currentDay, String name) {
+        return todayResult + i + DAY + Week.getNameByOrder(currentDay)+ " " + name;
     }
 }
